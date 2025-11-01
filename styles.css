@@ -1,0 +1,399 @@
+/* Modern responsive styles for Level Up Gosport demo */
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#0b2545;
+  --muted:#55677a;
+  --accent:#2cc36b;
+  --accent-2:#f3c25a;
+  /* theme-aware surface variables */
+  --header-bg: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+  --header-border: rgba(11,37,69,0.06);
+  --hero-bg: linear-gradient(120deg,#e8fdf1 0%, #f6fbff 100%);
+  --footer-bg: #ffffff;
+  --nav-hover-bg: rgba(11,37,69,0.04);
+  --ghost-border: rgba(11,37,69,0.08);
+  --input-border: rgba(11,37,69,0.08);
+  --button-text: #fff; /* default button text on colored CTAs */
+
+  --radius:10px;
+  --container:1100px;
+  --sp:16px;
+  --shadow: 0 6px 18px rgba(11,37,69,0.08);
+    --link-color: #0b2545; /* default link color (deep navy) */
+    --header-height:120px;
+}
+
+/* Dark theme (applies when body.dark is present) */
+body.dark{
+  --bg:#071228;
+  --card:#0b1b2a;
+  --text:#e6f3f6;
+  --muted:#9fb3c5;
+  --accent:#2cc36b;
+  --accent-2:#f3c25a;
+  --shadow: 0 8px 20px rgba(0,0,0,0.5);
+  --header-bg: linear-gradient(180deg, rgba(11,26,39,0.6), rgba(11,26,39,0.4));
+  --header-border: rgba(255,255,255,0.04);
+  --hero-bg: linear-gradient(120deg,#071228 0%, #081a2a 100%);
+  --footer-bg: var(--card);
+  --nav-hover-bg: rgba(255,255,255,0.06);
+  --ghost-border: rgba(255,255,255,0.12);
+    --link-color: #8ed1fc; /* light blue for links in dark mode */
+  --input-border: rgba(255,255,255,0.12);
+  --button-text: #fff;
+}
+
+/* High contrast theme (applies when body.high-contrast is present)
+   This mode prioritizes maximum contrast and larger focus outlines. */
+body.high-contrast{
+  --bg:#000000;
+  /* Make cards visible against the black page background in high-contrast mode */
+  --card:#111111;
+  --text:#ffffff;
+  --muted:#ffffff;
+  --accent:#ffff00;
+  --accent-2:#ff8c00;
+  --shadow: none;
+  --header-bg: #000000;
+  --header-border: #ffff00;
+    --link-color: #8ed1fc; /* light blue for links in high-contrast mode */
+  --hero-bg: #000000;
+  --footer-bg: #000000;
+  --nav-hover-bg: rgba(255,255,0,0.08);
+  --input-border: #ffffff;
+  --button-text: #000;
+  
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.container{max-width:var(--container);margin:0 auto;padding:0 20px}
+
+/* Ensure page content sits below the fixed header */
+main{padding-top:calc(var(--header-height) + 8px)}
+
+.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:8px;background:var(--text);color:var(--card);z-index:999}
+
+.site-header{background:var(--header-bg);backdrop-filter:saturate(120%) blur(4px);position:fixed;top:0;left:0;right:0;z-index:1000;border-bottom:1px solid var(--header-border);height:var(--header-height)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;min-height:var(--header-height);padding:12px 0}
+.logo{display:inline-block;width:100px;height:100px;overflow:hidden}
+.logo img{display:block;width:100%;height:100%;object-fit:cover;transform-origin:center;transform:scale(1.25);transition:transform .25s ease-out}
+
+.site-nav{display:flex;align-items:center}
+.nav-toggle{display:none;background:none;border:1px solid transparent;padding:8px;border-radius:6px}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;gap:16px}
+.nav-list a{color:var(--link-color);text-decoration:none;padding:8px 10px;border-radius:6px}
+.nav-list a:focus,.nav-list a:hover{background:var(--nav-hover-bg)}
+
+/* Generic link color across the site (use .link for specific link styles) */
+a, .link{color:var(--link-color)}
+
+/* Header controls for theme toggles */
+.header-controls{display:flex;gap:8px;align-items:center;margin-left:12px}
+.control-btn{background:transparent;border:1px solid var(--header-border);padding:8px 10px;border-radius:8px;cursor:pointer;font-size:0.95rem;color:var(--text);white-space:nowrap;min-width:108px;text-align:center}
+.control-btn[aria-pressed="true"]{background:var(--accent);color:var(--card);border-color:transparent}
+.control-btn:focus{outline:3px solid rgba(44,195,107,0.22);outline-offset:2px}
+
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+.hero{padding:0;position:relative;overflow:hidden}
+.hero-media{position:relative;width:100%;overflow:hidden}
+.hero-image{display:block;width:100vw;max-width:100%;height:clamp(300px,48vh,640px);object-fit:contain;object-position:center;transform:translateX(calc((100% - 100vw)/2));background:var(--hero-bg);}
+.hero-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;text-align:center;padding:12px 18px;border-radius:12px;background:rgba(0,0,0,0.32)}
+.hero-title h1{margin:0;color:#fff;font-size:clamp(1.6rem,3.8vw,3rem);text-shadow:0 2px 6px rgba(0,0,0,0.6), 0 8px 18px rgba(0,0,0,0.36)}
+.hero-inner{display:block}
+.hero-copy h1{margin:0 0 12px;font-size:clamp(1.6rem,3.2vw,2.4rem)}
+.lead{
+  color:var(--muted);
+  margin:0 0 18px;
+  font-size:clamp(1rem,2.2vw,1.05rem);
+  font-weight:600;
+  letter-spacing:0.01em;
+}
+
+/* Hero-specific lead: larger, bolder and given an accent left bar for impact */
+.hero-copy .lead{
+  color:#fff; /* hero-copy already provides a dark background */
+  font-size:clamp(1.05rem,2.6vw,1.35rem);
+  font-weight:700;
+  margin:0 0 18px;
+  /* removed left accent bar per request; keep a subtle internal padding for balance */
+  padding-left:0.25rem;
+  text-shadow:0 2px 8px rgba(0,0,0,0.45);
+}
+
+/* Accessible fallbacks for dark/high-contrast modes */
+body.dark .hero-copy .lead{color:#fff}
+body.high-contrast .hero-copy .lead{color:var(--text);border-left-color:var(--accent)}
+/* Ensure hero text remains readable over the background image */
+.hero-copy{background:rgba(0,0,0,0.45);padding:18px;border-radius:10px;color:#fff;display:inline-block}
+body.dark .hero-copy{background:rgba(0,0,0,0.35)}
+body.high-contrast .hero-copy{background:rgba(0,0,0,0.6)}
+.hero-cta .btn{margin-right:12px}
+.hero-cta .btn.ghost{color:#fff;border-color:rgba(255,255,255,0.18)}
+.hero-cta .btn.ghost:hover{background:rgba(255,255,255,0.06);color:#fff}
+.hero-media img{display:block;border-radius:0;box-shadow:none}
+
+/* Lead grid: KAVS emblem on the left, lead content on the right */
+.lead-grid{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.kavs-img img{display:block;width:120px;height:auto;object-fit:contain}
+.lead-content{min-width:0}
+
+@media (max-width:720px){
+  .lead-grid{grid-template-columns:1fr;gap:12px}
+  .kavs-img{justify-self:center}
+}
+
+/* Subtitle inside the hero title — give it a bit of lift and accent */
+.hero-sub{display:inline-block;margin-left:8px;font-weight:700;color:var(--accent);font-variant:small-caps;letter-spacing:0.02em;text-shadow:0 1px 2px rgba(0,0,0,0.5);transform:translateY(1px)}
+
+/* Adjustments for dark and high-contrast modes so the title remains readable */
+body.dark .hero-title{background:rgba(0,0,0,0.45)}
+body.dark .hero-sub{color:var(--accent)}
+body.high-contrast .hero-title{background:var(--card);color:var(--text)}
+body.high-contrast .hero-title h1{color:var(--text);text-shadow:none}
+body.high-contrast .hero-sub{color:var(--accent);font-weight:800}
+
+/* KAVS quote styling in the hero */
+.kavs-figure{margin:12px 0 18px}
+.kavs-note{margin:0;padding:12px 16px;border-left:4px solid var(--accent);background:linear-gradient(90deg, rgba(44,195,107,0.06), transparent);border-radius:6px;font-style:italic;color:#fff}
+.kavs-note strong{font-weight:600;font-style:normal}
+body.dark .kavs-note{background:linear-gradient(90deg, rgba(44,195,107,0.06), transparent)}
+body.high-contrast .kavs-note{background:transparent;border-left-color:var(--accent);color:var(--text)}
+/* Ensure testimonial blockquotes adapt to theme like the KAVS note */
+body.dark .testimonial blockquote{background:linear-gradient(90deg, rgba(44,195,107,0.06), transparent)}
+body.high-contrast .testimonial blockquote{background:transparent;border-left-color:var(--accent);color:var(--text)}
+
+/* Partners marquee (continuous scroll) */
+.partners{padding:28px 0}
+.marquee{position:relative}
+.marquee-viewport{overflow:hidden}
+.partners .marquee{
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  padding:0 20px; /* match container side padding */
+}
+.marquee-track{display:flex;gap:30px;padding:0;margin:0;list-style:none;align-items:center;will-change:transform}
+.marquee-item{flex:0 0 450px;display:flex;align-items:center;justify-content:center;padding:0;background:#ffffff;border-radius:8px;box-shadow:var(--shadow);height:220px;overflow:hidden}
+.marquee-item img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+
+/* Pause handled by JS (hover/focus listeners) for precise control */
+
+/* Responsive sizes */
+@media (max-width:1000px){
+  .marquee-track{gap:26px}
+  .marquee-item{flex:0 0 380px;height:200px}
+}
+
+@media (max-width:800px){
+  .marquee-track{gap:22px}
+  .marquee-item{flex:0 0 320px;height:180px}
+}
+
+@media (max-width:480px){
+  .marquee-track{gap:18px}
+  .marquee-item{flex:0 0 260px;height:140px}
+}
+
+/* Force marquee cards to remain white even in dark/high-contrast modes */
+body.dark .marquee-item{background:#ffffff}
+body.high-contrast .marquee-item{background:#ffffff}
+
+/* Testimonials / case studies */
+.testimonials header p{color:var(--muted);margin-top:6px}
+.testimonial-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:start}
+.testimonial{position:relative;display:block;min-height:320px;border-radius:12px;overflow:hidden;padding:0;box-shadow:var(--shadow);background:var(--card)}
+/* Visible image element (fills the card) */
+.testimonial-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:12px}
+
+/* Image galleries used across site (WEXi, Gardening, Bricksy, Events) */
+.image-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-items:start}
+.image-card{position:relative;overflow:hidden;border-radius:12px;background:var(--card);box-shadow:var(--shadow);min-height:220px}
+.image-card img{display:block;width:100%;height:220px;object-fit:contain;object-position:center;background:var(--card)}
+.image-card .overlay{position:absolute;left:0;right:0;bottom:0;padding:12px;display:flex;justify-content:center;align-items:flex-end}
+.image-card .text-panel{--quote-blur:4px;--quote-pad:0.6em 0.8rem;display:block;max-width:92%;}
+
+@media (max-width:680px){
+  .image-card img{height:160px}
+}
+
+/* Overlay sits at the card bottom; we create a blurred band using ::before which
+  duplicates the image (via --bg-url) and applies a blur, then a gradient above it */
+.testimonial .overlay{position:absolute;left:0;right:0;bottom:0;padding:18px 16px;display:flex;align-items:flex-end;justify-content:center;z-index:3;color:#fff;background:linear-gradient(180deg, rgba(0,0,0,0) 6%, rgba(0,0,0,0.08) 30%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.56) 100%)}
+
+/* text-panel: content-sized panel that blurs only the underlying image where the text sits
+  Uses scalable variables so the blur and padding follow the text size and can be adjusted */
+.testimonial{--quote-blur:6px;--quote-pad:0.8em 1rem;--quote-radius:8px}
+.text-panel{position:relative;display:inline-block;backdrop-filter:blur(var(--quote-blur));-webkit-backdrop-filter:blur(var(--quote-blur));background:rgba(0,0,0,0.28);padding:var(--quote-pad);border-radius:var(--quote-radius);max-width:92%;box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+.testimonial .text-panel{text-align:center}
+.testimonial blockquote{margin:0;font-style:italic;color:#fff;text-align:center}
+.testimonial .cite{margin-top:8px;color:rgba(255,255,255,0.95);font-weight:700;text-align:center}
+
+@media (max-width:480px){
+  .testimonial img{height:140px}
+}
+
+/* Layout: place Ben centered on its own row, then Daniel & Luke on next row */
+@media (min-width:700px){
+  .testimonial-grid{grid-template-columns:1fr 1fr}
+  /* First testimonial (Ben) spans both columns and is centered */
+  .testimonial-grid .testimonial:first-child{grid-column:1/-1;max-width:720px;margin:0 auto}
+  /* Keep Ben's visual format (no change to blockquote/font) but ensure image keeps original cropping */
+  .testimonial-grid .testimonial:first-child img{object-fit:cover;object-position:center}
+  /* For the remaining testimonials, ensure images don't crop from the left side */
+  .testimonial-grid .testimonial:not(:first-child) img{object-fit:cover;object-position:left center}
+}
+
+/* default animation keyframes; duration is controlled via inline style or JS setting --marquee-duration */
+
+/* The marquee is animated in JS via requestAnimationFrame for smooth, seamless looping. */
+
+.btn{display:inline-block;padding:10px 16px;border-radius:8px;border:0;cursor:pointer;text-decoration:none;font-weight:600}
+.btn.primary{background:var(--accent);color:var(--button-text)}
+.btn.ghost{background:transparent;border:1px solid var(--ghost-border);color:var(--text)}
+
+.about{padding:36px 0}
+.grid{display:grid;gap:18px}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:18px;
+  align-items:center;
+  margin-top:16px;
+}
+.stat-card{background:var(--card);padding:20px 18px;border-radius:12px;box-shadow:var(--shadow);text-align:center;min-height:92px;display:flex;flex-direction:column;justify-content:center}
+.stat-card strong{display:block;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:1}
+.stat-card span{color:var(--muted);margin-top:6px;font-size:0.95rem}
+
+.services{padding:32px 0}
+.service-grid{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow)}
+.card h3{margin-top:0}
+
+/* Mission card: use the hidden-disibility banner as a background image with overlay for legibility */
+.mission-card{
+  position:relative;
+  overflow:hidden;
+  color:#fff; /* text on top of image */
+  background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18));
+}
+.mission-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: url('images/hidden-disibility-banner-short.jpeg');
+  background-size:cover;
+  background-position:center;
+  filter:brightness(0.95) saturate(0.95);
+  z-index:0;
+  transform:scale(1.02);
+}
+.mission-card > *{position:relative;z-index:1}
+.mission-card p{color:rgba(255,255,255,0.95)}
+
+@media (max-width:720px){
+  .mission-card::before{background-position:top center}
+}
+
+/* Offer card: use same banner but anchor top so the top of the image is visible */
+.offer-card{
+  position:relative;
+  overflow:hidden;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.14));
+}
+.offer-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: url('images/hidden-disibility-banner.jpg');
+  background-size:cover;
+  background-position: top center;
+  filter:brightness(0.95) saturate(0.95);
+  z-index:0;
+}
+.offer-card > *{position:relative;z-index:1}
+.offer-card ul{color:rgba(255,255,255,0.95);margin:0;padding-left:18px}
+.offer-card li{margin-bottom:8px}
+
+@media (max-width:720px){
+  .offer-card::before{background-position:top center}
+  .offer-card ul{padding-left:12px}
+}
+
+/* Providers grid for WEXi partners */
+.providers-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:stretch;grid-auto-rows:1fr}
+.provider-card{background:var(--card);padding:12px;border-radius:10px;box-shadow:var(--shadow);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:space-between}
+.provider-card img{width:100%;max-width:160px;height:100px;object-fit:contain;flex:0 0 auto}
+.provider-card h4{margin:6px 0 0;font-size:1rem}
+.provider-card p{margin:0;color:var(--muted);font-size:0.95rem}
+
+@media (max-width:520px){
+  .provider-card img{max-width:140px;height:90px}
+}
+
+.events{padding:32px 0}
+.event-list{grid-template-columns:repeat(2,1fr)}
+.event-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
+.event-card time{display:block;color:var(--muted);font-size:0.9rem}
+
+.volunteer-cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:28px 0;border-radius:8px;margin:20px 0}
+.volunteer-inner{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.volunteer-inner h2{margin:0}
+
+.contact{padding:28px 0}
+.contact-form{max-width:640px}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;margin-bottom:6px;font-weight:600}
+.form-row input,.form-row textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--input-border);background:var(--card);color:var(--text)}
+.form-actions{display:flex;gap:12px;margin-top:12px}
+
+.site-footer{background:var(--footer-bg);padding:28px 0;border-top:1px solid var(--header-border)}
+.footer-inner{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
+.footer-brand img{display:block;margin-bottom:6px}
+.footer-nav ul{list-style:none;padding:0;margin:0;display:flex;gap:12px}
+.footer-nav a{text-decoration:none;color:var(--link-color)}
+
+/* Dark/high-contrast specific tweaks for interactive elements */
+body.dark .nav-list a:focus, body.dark .nav-list a:hover{background:var(--nav-hover-bg)}
+body.high-contrast .nav-list a:focus, body.high-contrast .nav-list a:hover{background:var(--nav-hover-bg)}
+
+body.dark .btn.ghost{border:1px solid var(--ghost-border)}
+body.high-contrast .btn.ghost{border:1px solid var(--ghost-border)}
+
+/* Volunteer CTA: default white text over accent gradient; dark keeps white; high-contrast uses surface color */
+.volunteer-cta{color:#fff}
+body.dark .volunteer-cta{color:#fff}
+body.high-contrast .volunteer-cta{color:var(--card)}
+
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-media{order:-1}
+  .stats{grid-template-columns:repeat(1,1fr)}
+  .service-grid{grid-template-columns:repeat(1,1fr)}
+  .event-list{grid-template-columns:repeat(1,1fr)}
+  .footer-inner{grid-template-columns:1fr}
+}
+
+@media (max-width:680px){
+  .nav-toggle{display:inline-block}
+  .nav-list{position:absolute;right:12px;top:var(--header-height);background:var(--card);padding:12px;border-radius:8px;box-shadow:var(--shadow);flex-direction:column;display:none}
+  .nav-list.show{display:flex}
+}
+
+/* Focus styles for keyboard users */
+:focus{outline:3px solid rgba(44,195,107,0.18);outline-offset:3px}
+
+/* Adjust focus for high-contrast mode */
+body.high-contrast :focus{outline:4px solid var(--accent);outline-offset:3px}
